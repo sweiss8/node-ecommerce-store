@@ -14,11 +14,13 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
+  const userId = req.user._id
   const product = new Product({
     price,
     title,
     imageUrl,
-    description
+    description,
+    userId
   });
   product
     .save() //this method is provided by Mongoose
@@ -78,6 +80,8 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.find()
+  // .select('price description') // Only selects specified fields from DB
+  // .populate('userId', 'name email -_id') //Only populates specified fields
     .then(products => {
       res.render('admin/products', {
         prods: products,
